@@ -11,8 +11,6 @@ class Model
     private $body;
     private $dt_added;
     private $dt_last_used;
-    private $slug;
-
 
     /**
      * @param mixed $body
@@ -126,22 +124,6 @@ class Model
         return $this->dt_last_used;
     }
 
-    /**
-     * @param mixed $slug
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
     public function exchange(array $data)
     {
 
@@ -151,7 +133,6 @@ class Model
         $this->setBody($data['body']);
         $this->setDtAdded($data['dt_added']);
         $this->setDtLastUsed($data['dt_last_used']);
-        $this->setSlug($data['slug']);
 
         return $this;
     }
