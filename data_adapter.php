@@ -3,12 +3,14 @@
 namespace Externals\DB_Email_Templates;
 
 require_once dirname(__FILE__) . '/model.php';
+require_once dirname(__FILE__) . '/db_email_template_da_interface.php';
 
 use Externals\DB_Email_Templates\Model as EmailTemplate;
+use Externals\DB_Email_Templates\DbEmailTemplateDa as DAInterface;
 use PDO;
 use PDOStatement;
 
-class DataAdapter
+class DataAdapter implements DAInterface
 {
     /**
      * @var PDO
