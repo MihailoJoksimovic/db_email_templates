@@ -1,12 +1,12 @@
 <?php
 
 require_once 'config/config.inc.php';
-require_once 'email_templates_da.php';
+require_once 'data_adapter.php';
 
 $pdo = new LocalPDO();
 
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$eda = new EmailTemplatesDa($pdo);
+$eda = new Externals\DB_Email_Templates\DataAdapter($pdo, 'email_templates');
 
 $eda->assertDBIsOK();
 

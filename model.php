@@ -1,6 +1,8 @@
 <?php
 
-class EmailTemplate
+namespace Externals\DB_Email_Templates;
+
+class Model
 {
     private $id;
     private $template_name;

@@ -1,8 +1,14 @@
 <?php
 
-require_once dirname(__FILE__) . '/email_template.php';
+namespace Externals\DB_Email_Templates;
 
-class EmailTemplatesDa
+require_once dirname(__FILE__) . '/model.php';
+
+use Externals\DB_Email_Templates\Model as EmailTemplate;
+use PDO;
+use PDOStatement;
+
+class DataAdapter
 {
     /**
      * @var PDO
