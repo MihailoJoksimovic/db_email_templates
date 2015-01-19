@@ -11,5 +11,7 @@ interface DbEmailTemplateDa
     public function getRandomByCategory($category_id);
 
     public function touch($id);
+
+    public function getCategoryIdBySlug($slug);
 }
 

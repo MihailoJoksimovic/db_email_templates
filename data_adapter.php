@@ -73,6 +73,19 @@ class DataAdapter implements DAInterface
         return $this->getPDO()->exec("UPDATE {$this->getDbTableName()} SET dt_last_used = NOW() WHERE id = $id");
     }
 
+    public function getCategoryIdBySlug($slug)
+    {
+        $sql = "SELECT id FROM {$this->getDbCategoryTableName()} WHERE slug = :slug LIMIT 1";
+
+        $query = $this->getPDO()->prepare($sql);
+
+        $query->bindValue('slug', $slug);
+
+        $query->execute();
+
+        return $query->fetchColumn();
+    }
+
     /**
      * @param PDO $pdo
      */
