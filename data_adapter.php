@@ -66,6 +66,35 @@ class DataAdapter implements DAInterface
         return $this->getOneRow($query);
     }
 
+    public function getActiveTemplatesByCategorySlug($category_slug)
+    {
+        $category_id = $this->getCategoryIdBySlug($category_slug);
+
+        $sql = "SELECT * FROM {$this->getDbTableName()} WHERE is_active = 1 AND category_id = :category_id";
+
+        $query = $this->getPDO()->prepare($sql);
+
+        $query->bindValue('category_id', $category_id);
+
+        $query->execute();
+
+        $rows = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($rows)) {
+            return array();
+        }
+
+        $objs = array();
+
+        foreach ($rows as $row) {
+            $obj = $this->createObject($row);
+
+            $objs[] = $obj;
+        }
+
+        return $objs;
+    }
+
     public function touch($id)
     {
         $id = (int) $id;
@@ -149,6 +178,11 @@ class DataAdapter implements DAInterface
     {
         $template = new EmailTemplate();
         $template->exchange($row);
+
+        if (!empty($row['id'])) {
+            $template->setId($row['id']);
+        }
+
         return $template;
     }
 

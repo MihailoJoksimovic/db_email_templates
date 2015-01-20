@@ -13,5 +13,7 @@ interface DbEmailTemplateDa
     public function touch($id);
 
     public function getCategoryIdBySlug($slug);
+
+    public function getActiveTemplatesByCategorySlug($category_slug);
 }
 
