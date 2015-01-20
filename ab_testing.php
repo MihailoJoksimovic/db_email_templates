@@ -44,6 +44,9 @@ class AbTesting
         return count($this->getTemplates());
     }
 
+    /**
+     * @return Model
+     */
     public function nextTemplate()
     {
         $template = array_shift($this->templates);
