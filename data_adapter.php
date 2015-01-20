@@ -66,11 +66,15 @@ class DataAdapter implements DAInterface
         return $this->getOneRow($query);
     }
 
-    public function getActiveTemplatesByCategorySlug($category_slug)
+    public function getAllTemplatesByCategorySlug($category_slug, $only_active = false)
     {
         $category_id = $this->getCategoryIdBySlug($category_slug);
 
-        $sql = "SELECT * FROM {$this->getDbTableName()} WHERE is_active = 1 AND category_id = :category_id";
+        $sql = "SELECT * FROM {$this->getDbTableName()} WHERE category_id = :category_id";
+
+        if ($only_active) {
+            $sql .= " AND is_active = 1 ";
+        }
 
         $query = $this->getPDO()->prepare($sql);
 
@@ -95,6 +99,11 @@ class DataAdapter implements DAInterface
         return $objs;
     }
 
+    public function getActiveTemplatesByCategorySlug($category_slug)
+    {
+        return $this->getAllTemplatesByCategorySlug($category_slug, $only_active = true);
+    }
+
     public function touch($id)
     {
         $id = (int) $id;
@@ -113,6 +122,108 @@ class DataAdapter implements DAInterface
         $query->execute();
 
         return $query->fetchColumn();
+    }
+
+    public function getAllCategories()
+    {
+        $sql = "SELECT * FROM {$this->getDbCategoryTableName()}";
+
+        return $this->getPDO()->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function addCategory(array $category)
+    {
+        $sql = "INSERT INTO {$this->getDbCategoryTableName()} SET name = :name, slug = :slug";
+
+        $query = $this->getPDO()->prepare($sql);
+
+        return $query->execute(array(
+            ':name' => $category['name'],
+            ':slug' => $category['slug'],
+        ));
+    }
+
+    public function updateCategory(array $category)
+    {
+        $sql = "UPDATE {$this->getDbCategoryTableName()} SET name = :name, slug = :slug WHERE id = :id";
+
+        $query = $this->getPDO()->prepare($sql);
+
+        return $query->execute(array(
+            ':id'   => $category['id'],
+            ':name' => $category['name'],
+            ':slug' => $category['slug'],
+        ));
+    }
+
+    public function removeCategory($id)
+    {
+        $sql = "DELETE FROM {$this->getDbCategoryTableName()} WHERE id = :id";
+
+        $query = $this->getPDO()->prepare($sql);
+
+        return $query->execute(array(
+            ':id'   => $id
+        ));
+    }
+
+    public function addTemplate(array $template)
+    {
+        $sql = <<<SQL
+INSERT INTO {$this->getDbTableName()}
+SET
+  template_name = :name,
+  subject = :subject,
+  body = :body,
+  is_active = :is_active,
+  category_id = :category_id
+SQL;
+
+        $query = $this->getPDO()->prepare($sql);
+
+        return $query->execute(array(
+            ':name'         => $template['template_name'],
+            ':subject'      => $template['subject'],
+            ':body'         => $template['body'],
+            ':is_active'    => $template['is_active'],
+            ':category_id'  => $template['category_id'],
+        ));
+    }
+
+    public function updateTemplate(array $template)
+    {
+        $sql = <<<SQL
+UPDATE  {$this->getDbTableName()}
+SET
+  template_name = :name,
+  subject = :subject,
+  body = :body,
+  is_active = :is_active,
+  category_id = :category_id
+WHERE id = :id
+SQL;
+
+        $query = $this->getPDO()->prepare($sql);
+
+        return $query->execute(array(
+            ':id'           => $template['id'],
+            ':name'         => $template['template_name'],
+            ':subject'      => $template['subject'],
+            ':body'         => $template['body'],
+            ':is_active'    => $template['is_active'],
+            ':category_id'  => $template['category_id'],
+        ));
+    }
+
+    public function removeTemplate($id)
+    {
+        $sql = "DELETE FROM {$this->getDbTableName()} WHERE id = :id";
+
+        $query = $this->getPDO()->prepare($sql);
+
+        return $query->execute(array(
+            ':id'   => $id
+        ));
     }
 
     /**

@@ -9,6 +9,7 @@ class Model
     private $category_id;
     private $subject;
     private $body;
+    private $is_active;
     private $dt_added;
     private $dt_last_used;
 
@@ -124,6 +125,24 @@ class Model
         return $this->dt_last_used;
     }
 
+    /**
+     * @param mixed $is_active
+     */
+    public function setIsActive($is_active)
+    {
+        $this->is_active = $is_active;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isActive()
+    {
+        return $this->is_active;
+    }
+
+
+
     public function exchange(array $data)
     {
 
@@ -131,6 +150,7 @@ class Model
         $this->setCategoryId($data['category_id']);
         $this->setSubject($data['subject']);
         $this->setBody($data['body']);
+        $this->setIsActive($data['is_active']);
         $this->setDtAdded($data['dt_added']);
         $this->setDtLastUsed($data['dt_last_used']);
 
